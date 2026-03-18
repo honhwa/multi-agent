@@ -1,0 +1,63 @@
+{
+  "project": "协作写作项目（请修改为实际名称）",
+  "version": 1,
+  "updated_at": "",
+  "subtasks": [
+    {
+      "id": "T1",
+      "title": "市场规模数据搜集",
+      "owner_role": "Researcher",
+      "status": "pending",
+      "deps": [],
+      "artifact_path": "research_data/market_size.md"
+    },
+    {
+      "id": "T2",
+      "title": "主要玩家与竞品分析",
+      "owner_role": "Researcher",
+      "status": "pending",
+      "deps": [],
+      "artifact_path": "research_data/players.md"
+    },
+    {
+      "id": "T3",
+      "title": "政策动向整理",
+      "owner_role": "Researcher",
+      "status": "pending",
+      "deps": [],
+      "artifact_path": "research_data/policy.md"
+    },
+    {
+      "id": "T4",
+      "title": "技术趋势提炼",
+      "owner_role": "Researcher",
+      "status": "pending",
+      "deps": [],
+      "artifact_path": "research_data/tech_trends.md"
+    },
+    {
+      "id": "T5",
+      "title": "案例研究",
+      "owner_role": "Researcher",
+      "status": "pending",
+      "deps": [],
+      "artifact_path": "research_data/cases.md"
+    },
+    {
+      "id": "T6",
+      "title": "报告初稿（含摘要与市场章节）",
+      "owner_role": "Writer",
+      "status": "pending",
+      "deps": ["T1", "T2"],
+      "artifact_path": "drafts/report_v1.md"
+    },
+    {
+      "id": "T7",
+      "title": "审校与修订迭代",
+      "owner_role": "Reviewer",
+      "status": "pending",
+      "deps": ["T6"],
+      "artifact_path": "tasks/review_comments.md"
+    }
+  ]
+}
