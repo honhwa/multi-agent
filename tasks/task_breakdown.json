@@ -1,0 +1,63 @@
+{
+  "project": "2026年多模态大模型研究进展报告",
+  "version": 1,
+  "updated_at": "2026-01-20T00:00:00Z",
+  "subtasks": [
+    {
+      "id": "T1",
+      "title": "技术架构与模型进展搜集",
+      "owner_role": "researcher",
+      "status": "pending",
+      "deps": [],
+      "artifact_path": "research_data/tech_architecture.md"
+    },
+    {
+      "id": "T2",
+      "title": "主流模型与产品分析",
+      "owner_role": "researcher",
+      "status": "pending",
+      "deps": [],
+      "artifact_path": "research_data/models_products.md"
+    },
+    {
+      "id": "T3",
+      "title": "训练方法与评测基准",
+      "owner_role": "researcher",
+      "status": "pending",
+      "deps": [],
+      "artifact_path": "research_data/training_benchmark.md"
+    },
+    {
+      "id": "T4",
+      "title": "应用场景与案例分析",
+      "owner_role": "researcher",
+      "status": "pending",
+      "deps": [],
+      "artifact_path": "research_data/applications.md"
+    },
+    {
+      "id": "T5",
+      "title": "产业生态与开源项目",
+      "owner_role": "researcher",
+      "status": "pending",
+      "deps": [],
+      "artifact_path": "research_data/ecosystem.md"
+    },
+    {
+      "id": "T6",
+      "title": "报告初稿撰写",
+      "owner_role": "writer",
+      "status": "pending",
+      "deps": ["T1", "T2", "T3", "T4", "T5"],
+      "artifact_path": "drafts/report_v1.md"
+    },
+    {
+      "id": "T7",
+      "title": "审校与修订迭代",
+      "owner_role": "reviewer",
+      "status": "pending",
+      "deps": ["T6"],
+      "artifact_path": "comments/review_comments.md"
+    }
+  ]
+}
