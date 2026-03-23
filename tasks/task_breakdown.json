@@ -1,63 +1,80 @@
 {
-  "project": "2026年多模态大模型研究进展报告",
+  "project": "2026 年多模态大模型研究进展报告",
   "version": 1,
-  "updated_at": "2026-01-20T00:00:00Z",
+  "updated_at": "2026-03-23T15:21:00+08:00",
+  "deadline": "2026-03-27",
   "subtasks": [
     {
       "id": "T1",
-      "title": "技术架构与模型进展搜集",
+      "title": "技术发展调研",
+      "description": "调研 2026 年多模态大模型的技术发展现状，包括架构演进、训练方法、模型性能等",
       "owner_role": "researcher",
-      "status": "pending",
+      "status": "completed",
       "deps": [],
-      "artifact_path": "research_data/tech_architecture.md"
+      "artifact_path": "research_data/technical_development.md"
     },
     {
       "id": "T2",
-      "title": "主流模型与产品分析",
+      "title": "关键突破调研",
+      "description": "调研 2026 年多模态大模型领域的关键技术突破和创新点",
       "owner_role": "researcher",
-      "status": "pending",
+      "status": "completed",
       "deps": [],
-      "artifact_path": "research_data/models_products.md"
+      "artifact_path": "research_data/key_breakthroughs.md"
     },
     {
       "id": "T3",
-      "title": "训练方法与评测基准",
+      "title": "应用场景调研",
+      "description": "调研 2026 年多模态大模型的主要应用场景和落地案例",
       "owner_role": "researcher",
-      "status": "pending",
+      "status": "completed",
       "deps": [],
-      "artifact_path": "research_data/training_benchmark.md"
+      "artifact_path": "research_data/application_scenarios.md"
     },
     {
       "id": "T4",
-      "title": "应用场景与案例分析",
+      "title": "未来趋势调研",
+      "description": "调研 2026 年多模态大模型的未来发展趋势和挑战",
       "owner_role": "researcher",
-      "status": "pending",
+      "status": "completed",
       "deps": [],
-      "artifact_path": "research_data/applications.md"
+      "artifact_path": "research_data/future_trends.md"
     },
     {
       "id": "T5",
-      "title": "产业生态与开源项目",
-      "owner_role": "researcher",
-      "status": "pending",
-      "deps": [],
-      "artifact_path": "research_data/ecosystem.md"
-    },
-    {
-      "id": "T6",
-      "title": "报告初稿撰写",
+      "title": "撰写初稿",
+      "description": "基于研究数据撰写报告初稿",
       "owner_role": "writer",
-      "status": "pending",
-      "deps": ["T1", "T2", "T3", "T4", "T5"],
+      "status": "completed",
+      "deps": ["T1", "T2", "T3", "T4"],
       "artifact_path": "drafts/report_v1.md"
     },
     {
-      "id": "T7",
-      "title": "审校与修订迭代",
+      "id": "T6",
+      "title": "审校反馈",
+      "description": "对初稿进行审校并提出修改意见",
       "owner_role": "reviewer",
-      "status": "pending",
-      "deps": ["T6"],
+      "status": "completed",
+      "deps": ["T5"],
       "artifact_path": "comments/review_comments.md"
+    },
+    {
+      "id": "T7",
+      "title": "修订定稿",
+      "description": "根据审校意见修订报告",
+      "owner_role": "writer",
+      "status": "in_progress",
+      "deps": ["T6"],
+      "artifact_path": "drafts/report_final.md"
+    },
+    {
+      "id": "T8",
+      "title": "行业报告汇总",
+      "description": "分析最新研究数据，提取关键数据生成汇总文档",
+      "owner_role": "researcher",
+      "status": "completed",
+      "deps": ["T1", "T2", "T3", "T4"],
+      "artifact_path": "research_data/summary.md"
     }
   ]
 }
