@@ -307,11 +307,11 @@
 ## 🔍 十、附录：任务进度
 
 | 任务 ID | 任务名称 | 状态 | 产出文件 |
-|-------|---------|-------|------------|
-| T1 | 技术发展调研 | ✅ 已完成 | research_data/technical_development.md |
-| T2 | 关键突破调研 | ✅ 已完成 | research_data/key_breakthroughs.md |
-| T3 | 应用场景调研 | ✅ 已完成 | research_data/application_scenarios.md |
-| T4 | 未来趋势调研 | ✅ 已完成 | research_data/future_trends.md |
+|-------|---------|-------|---------|--|
+| T1 | 技术发展调研 | ✅ 已完成 | research_data/tech_architecture.md |
+| T2 | 关键突破调研 | ✅ 已完成 | research_data/training_benchmark.md |
+| T3 | 应用场景调研 | ✅ 已完成 | research_data/applications.md |
+| T4 | 未来趋势调研 | ✅ 已完成 | research_data/ecosystem.md |
 | T5 | 撰写初稿 | ✅ 已完成 | drafts/report_v1.md |
 | T6 | 审校反馈 | ✅ 已完成 | comments/review_comments.md |
 | T7 | 修订定稿 | 🔄 进行中 | drafts/report_final.md (待生成) |
@@ -319,4 +319,9 @@
 
 ---
 
-**备注**: 本汇总基于 `research_data/` 目录下各研究数据文件生成，可作为 writer 撰写报告的参考摘要。如需更新，请分析最新的 research_data 目录内容。
+**数据说明**: 本汇总基于 `research_data/` 目录下各研究数据文件生成，整合了 2025-2026 年多模态大模型的最新研究数据。
+
+- **数据来源**: `applications.md` (应用场景)、`models_products.md` (模型产品)、`tech_architecture.md` (技术架构)、`ecosystem.md` (产业生态)、`training_benchmark.md` (训练评测)
+- **数据截至时间**: 2026 年 3 月
+- **生成时间**: 2026-03-23
+- **报告生成**: coordinator 自动汇总
