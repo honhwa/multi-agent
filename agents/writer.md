@@ -86,6 +86,17 @@
 - 仅在 `multi-agent/` 内：`pull`、`add`、`commit`、`push`
 - commit message 必须以 `[writer]` 开头
 
+## PDF 生成（中文字体）
+- **不要使用**: PDFKit (Node.js), reportlab, fpdf2 - 都不支持中文
+- **正确方案**: WeasyPrint
+  ```python
+  from weasyprint import HTML
+  HTML('input.html').write_pdf('output.pdf')
+  ```
+- 安装: `uv pip install weasyprint`
+- 原理: 基于 CSS + HTML 渲染，自动嵌入系统字体
+
+
 ## 禁止（关键）
 - **不得**创建、修改或追加 `tasks/progress_log.md`（该文件仅 coordinator 维护）。
 - 不得修改 `research_data/**`、不得修改 `tasks/task_breakdown.json` 结构。
