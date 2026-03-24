@@ -1,0 +1,10 @@
+#!/bin/sh
+# Post-merge: 提醒重新加载 Agent 配置与工作区
+echo ""
+echo "=========================================="
+echo "[post-merge] 已合并远程更新。"
+echo "  若修改了 agents/*.md，请在 OpenClaw 中重新加载对应 Agent 配置。"
+echo "  建议: git status && 阅读 memory/MEMORY.md / tasks/progress_log.md"
+echo "=========================================="
+echo ""
+exit 0

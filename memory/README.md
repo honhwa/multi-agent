@@ -1,0 +1,15 @@
+# 项目共享记忆（MEMORY）
+
+> 多 Agent 异步协作的状态摘要和共享数据。详细任务以 `tasks/task_breakdown.json` 与 `tasks/progress_log.md` 为准。
+
+## 项目共享数据(仅做参考)
+
+| 字段 | 内容 |
+|------|------|
+| 主题 | （例：2026 年 AI 行业趋势研究报告） |
+| 阶段 | 初始化 / 研究中 / 撰稿中 / 审校中 / 已定稿 |
+| 代码仓 | https://github.com/zhangyoujian/multi-agent.git，分支: main |
+| 项目截止日期 | 2026年5月31 |
+
+## 记录文件
+-由`coordinator`角色在`memory/MEMORY.md`中按照上面的共享数据模板记录当前项目共享数据。

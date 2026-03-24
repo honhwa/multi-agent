@@ -1,0 +1,30 @@
+#!/bin/sh
+# Pre-commit: 校验 tasks/*.json；可选 Markdown 基础检查
+set -e
+REPO_ROOT=$(git rev-parse --show-toplevel)
+cd "$REPO_ROOT"
+
+STAGED_JSON=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^tasks/.*\.json$' || true)
+for f in $STAGED_JSON; do
+  if [ -f "$f" ]; then
+    if command -v python3 >/dev/null 2>&1; then
+      python3 -c "import json; json.load(open('$f', encoding='utf-8'))" || {
+        echo "pre-commit: JSON 无效 — $f"
+        exit 1
+      }
+    elif command -v python >/dev/null 2>&1; then
+      python -c "import json; json.load(open('$f', encoding='utf-8'))" || {
+        echo "pre-commit: JSON 无效 — $f"
+        exit 1
+      }
+    else
+      echo "pre-commit: 未找到 python，跳过 JSON 校验: $f"
+    fi
+  fi
+done
+
+# 可选：若已安装 markdownlint-cli
+# npx --no-install markdownlint-cli2 "**/*.md" 2>/dev/null || true
+
+echo "pre-commit: 校验通过。"
+exit 0
