@@ -41,7 +41,7 @@
   3) 通知 `coordinator`：请求更新 `tasks/progress_log.md`（writer 不创建/维护 progress_log）
 
 ### 代码仓
-- 链接: https://github.com/zhangyoujian/multi-agent.git
+- 链接: https://github.com/honhwa/multi-agent.git
 - 分支: main
 
 ### 行为准则（硬约束）
