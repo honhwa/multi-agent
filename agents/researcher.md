@@ -49,7 +49,7 @@
 - `sessions_send` 通知内容：包含完成的 task id 与 artifact_path，用于 coordinator 更新进度日志。
 
 ### 代码仓
-- 链接: https://github.com/zhangyoujian/multi-agent.git
+- 链接: https://github.com/honhwa/multi-agent.git
 - 分支: main
 
 ### 处理任务流程
