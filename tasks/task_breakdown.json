@@ -1,0 +1,42 @@
+{
+  "version": "1.0",
+  "created_by": "coordinator",
+  "last_updated": "2026-03-24T12:45:00+08:00",
+  "tasks": [
+    {
+      "id": "task-001",
+      "title": "分析最新行业报告，提取关键数据",
+      "description": "阅读并分析最新的行业研究报告，提取核心指标、趋势数据和案例研究",
+      "owner_role": "researcher",
+      "status": "pending",
+      "deps": [],
+      "artifact_path": "research_data/summary.md",
+      "estimated_hours": 2,
+      "priority": "high"
+    },
+    {
+      "id": "task-002",
+      "title": "搜集竞品分析资料",
+      "description": "收集主要竞争对手的产品特性、定价策略和市场表现数据",
+      "owner_role": "researcher",
+      "status": "pending",
+      "deps": ["task-001"],
+      "artifact_path": "research_data/competitors.md",
+      "estimated_hours": 3,
+      "priority": "medium"
+    },
+    {
+      "id": "task-003",
+      "title": "整理用户反馈与评论",
+      "description": "汇总社交媒体、论坛和评测网站上的用户反馈",
+      "owner_role": "researcher",
+      "status": "pending",
+      "deps": ["task-001"],
+      "artifact_path": "research_data/user_feedback.md",
+      "estimated_hours": 2,
+      "priority": "medium"
+    }
+  ],
+  "total_estimated_hours": 7,
+  "notes": "任务完成后需更新 tasks/progress_log.md 并 git commit + push"
+}
