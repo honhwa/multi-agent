@@ -47,7 +47,7 @@
 - 在任何情况下都不能修改代码仓中的 README.md 文件（遵循目录 README 的说明；不涉及仓库根 README）。
 
 ### 代码仓
-- 链接: https://github.com/zhangyoujian/multi-agent.git
+- 链接: https://github.com/honhwa/multi-agent.git
 - 分支: main
 
 ### 产出
