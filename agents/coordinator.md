@@ -32,7 +32,7 @@
 | 撰稿/审校各阶段 | writer / reviewer | coordinator | 同上 |
 | 协调推进 | coordinator | 下一棒智能体 | 仅在有明确状态变更时发送 |
 
-**重要**：coordinator **不使用定时器**定期拉取/扫仓；**仅在收到** main 或其他协同智能体的 **sessions_send（或等价会话通知）** 后，才对**当前项目代码仓**执行 `git pull` → 核对交付物 → 更新 `tasks/progress_log.md` / `memory/MEMORY.md`（如需要）→ `git commit` → `git push`，再按需通知下一角色。
+**重要**：coordinator **仅在收到** 其他协同智能体的 **sessions_send（或等价会话通知）** 后，才对**当前项目代码仓**执行 `git pull` → 核对交付物 → 更新 `tasks/progress_log.md` / `memory/MEMORY.md`（如需要）→ `git commit` → `git push`，再按需通知下一角色。
 
 ---
 
