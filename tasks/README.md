@@ -5,7 +5,7 @@
 > 由`coordinator`在收到openclaw递交任务之后，将任务拆解成多个子任务，生成task_breakdown.json然后提交，成员通过 `git pull` 同步查看各自任务详情
 
 ### 模板条目
-参考`tasks/task_breakdown_template.json文件`
+`tasks/task_breakdown_template.json` 仅用于演示 JSON 字段（示例）。实际 `task_breakdown.json` 由 coordinator 根据写作主题动态生成，子任务集合与内容可能与模板示例完全不同。
 
 ### 记录文件
 在tasks/task_breakdown.json中
@@ -19,8 +19,8 @@
 | 日期时间 | 协同者 | 工作进度 |
 |--------|---------|---------|
 |YYYY-MM-DD HH:mm  | coordinator | 项目初始化，task_breakdown.json v1 已提交。|
-|YYYY-MM-DD HH:mm  | researcher  | T1/T2 数据已写入 research_data/，写作可拉取。|
-|YYYY-MM-DD HH:mm  | writer      |drafts/report_v1.md 已提交，请 reviewer 进行审阅。|
+|YYYY-MM-DD HH:mm  | researcher  | 对应研究子任务的数据已写入 `research_data/`，写作可拉取。|
+|YYYY-MM-DD HH:mm  | writer      | drafts/ 中对应稿件版本已提交，请 reviewer 进行审阅。|
 |YYYY-MM-DD HH:mm  | reviewer    |review_comments.md 已更新，阻塞项：…… |
 
 ###  记录文件

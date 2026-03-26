@@ -11,7 +11,7 @@
 | `docs/`   | 操作与协议说明，引导openclaw如何创建协同智能体                                                                         |
 | `tasks/`  | 任务拆解与分配文件（如task_breakdown.json记录协调Agent拆解的子任务，progress_log.md跟踪各角色进度）                     |
 | `research_data/` | researcher研究产出（数据与来源）。                                                                             |
-| `drafts/` | 存放文稿草稿（Markdown/PDF），按章节或版本号命名（如chapter1_v1.md、report_final.md、report_final.pdf）                |
+| `drafts/` | 存放文稿草稿（Markdown/PDF），按章节或版本号命名（如chapter1_v1.md、report_final.md、report_final.docx                |
 | `memory/` | 记录协作状态（如MEMORY.md存储项目整体进度、代码仓和其他项目共享数据）                                                   |
 
 

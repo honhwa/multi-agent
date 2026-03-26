@@ -8,7 +8,7 @@
 
 1. **单一真相源**：每个角色的完整参数以 `./agents/<role>.md` 为准（`coordinator.md`、`researcher.md`、`writer.md`、`reviewer.md`）。
 2. **目录隔离**：Agent 私有文件（SOUL/TOOLS/USER、私有 `memory/`、私有 `skills/`）**不得**写入仓库克隆目录；
-3. **提交前缀**：各 Agent 在 `multi-agent/` git commit信息 必须以 `[coordinator]` / `[researcher]` / `[writer]` / `[reviewer]` 开头（与对应文件一致）。
+3. **提交前缀**：各 Agent 在新代码仓 `<repo_name>/` git commit信息 必须以 `[coordinator]` / `[researcher]` / `[writer]` / `[reviewer]` 开头（与对应文件一致）。
 ---
 
 ## 2. OpenClaw 注册 Agent 步骤
@@ -31,9 +31,9 @@
 openclaw agents add coordinator
 
 # 2. coordinator 工作空间下**不要**预先克隆固定模板远程地址。
-#    实际「项目协作代码仓」由 coordinator 在接到 main 的写作任务后**新建**：
-#    将本模板工程文件树拷贝到新远程仓，仅初始化 memory/*、tasks/* 等并首提交后 push。
-#    之后 coordinator 在 ~/openclaw-workspaces/agents/coordinator/multi-agent/ 操作该**项目仓**。
+#    实际「项目协作代码仓」由 coordinator 按用户给定的 `<repo_name>` 创建（fork/克隆）并保持与本模板仓内容一致：
+#    在此阶段不创建/更新 tasks/* 与 memory/* 中与写作相关的产物；直到收到写作任务后，coordinator 才生成 tasks/task_breakdown.json 与 memory/MEMORY.md 等写作产物。
+#    之后 coordinator 在 ~/openclaw-workspaces/agents/coordinator/<repo_name>/ 操作该**项目仓**。
 
 # 3. 为角色生成配置文件（参考 agents/coordinator.md）
 #    - SOUL.md: 定义角色职责和行为准则
@@ -64,8 +64,7 @@ OpenClaw 提供以下工具实现智能体间通信：
 | 工具 | 用途 | 场景 |
 |------|------|------|
 | `sessions_send` | 向指定会话发送消息 | 实时通知、任务分发 |
-| `sessions_spawn` | 创建新的子代理会话 | 异步任务执行 |
-| `subagents` | 管理子代理 | 查看/终止/引导子任务 |
+> 本项目的智能体协作仅使用 `sessions_send`（不使用子代理创建/执行任务）。
 
 ### 3.2 配置示例
 
@@ -114,6 +113,25 @@ OpenClaw 提供以下工具实现智能体间通信：
 
 ### 3.3 通信示例
 
+**main 通知 coordinator 创建项目仓：**
+
+```python
+# 使用 sessions_send
+sessions_send(
+    sessionKey="agent:coordinator:main",
+    message='{"kind":"create_repo","repo_name":"<user_repo_name>","project_id":"<project_id>","default_branch":"main","platform_access_token":"<admin_token_if_needed>"}'
+)
+```
+
+**main 通知 coordinator 下达写作任务：**
+
+```python
+sessions_send(
+    sessionKey="agent:coordinator:main",
+    message='{"kind":"writing_task","project_id":"<project_id>","theme":"<topic>","requirements":"<requirements>","deadline":"<deadline>"}'
+)
+```
+
 **coordinator 通知 researcher 执行任务：**
 
 ```python
@@ -122,24 +140,6 @@ sessions_send(
     sessionKey="agent:researcher:main",
     message="请根据 tasks/task_breakdown.json 搜集相关资料，输出到 research_data/ 目录"
 )
-```
-
-**coordinator spawn 子代理执行任务：**
-
-```python
-# 使用 sessions_spawn
-sessions_spawn(
-    task="分析最新行业报告，提取关键数据到 research_data/summary.md",
-    runtime="subagent",
-    agentId="researcher",
-    mode="run"  # 一次性任务
-)
-```
-
-**查看活跃的子代理：**
-
-```python
-subagents(action="list")
 ```
 
 ### 3.4 通信权限约束
@@ -155,7 +155,7 @@ subagents(action="list")
 
 ```bash
 # 进入代码仓目录
-cd ~/openclaw-workspaces/agents/<role>/multi-agent
+cd ~/openclaw-workspaces/agents/<role>/<repo_name>
 
 # 拉取最新
 git pull --rebase
@@ -196,7 +196,7 @@ writer 撰写初稿 → reviewer 审校 → writer 修订 → coordinator 确认
 
 ### 5.2 进度同步
 
-- **coordinator** 维护 `tasks/progress_log.md`，记录各角色完成状态（**仅**在收到其他智能体或 main 的会话通知后拉取、更新并推送）。
+- **coordinator** 维护 `tasks/progress_log.md`，记录各角色完成状态（**仅**在收到其他智能体的会话通知后拉取、更新并推送）。
 - 所有角色在收到 **coordinator** 通知后，使用 `git pull` 更新**当前项目协作仓**获取最新进度。
 - 每次状态更新后必须 `git commit` + `git push`（各角色各自负责的目录）。
 - **项目仓地址与访问 TOKEN**：由 **coordinator** 在新建远程仓后通过 `sessions_send` 发给 researcher / writer / reviewer；**禁止**将 TOKEN 写入仓库内文件。
@@ -205,7 +205,8 @@ writer 撰写初稿 → reviewer 审校 → writer 修订 → coordinator 确认
 
 | 场景 | 发送方 | 接收方 | 消息内容 |
 |------|--------|--------|----------|
-| 任务创建 | main | coordinator | 写作主题、写作要求、项目截止时间 |
+| 仓库创建请求 | main | coordinator | 用户提供的远程仓库名称 `repo_name`（可选：public/private）、以及创建仓所需的管理权限/令牌（如需要） |
+| 写作任务创建 | main | coordinator | 写作主题、写作要求、项目截止时间（并指明使用已创建的项目仓 `project_id` / repo_name，如需要） |
 | 资料收集 | coordinator | researcher | 收集资料主题、收集资料要求、完成时间 |
 | 资料收集完成 | researcher | coordinator | 收集资料完成，待开始初稿 |
 | 撰写稿件 | coordinator | writer | 参考资料完成初稿 |
@@ -213,7 +214,7 @@ writer 撰写初稿 → reviewer 审校 → writer 修订 → coordinator 确认
 | 审校稿件 | coordinator | reviewer | 稿件版本、待审校章节 |
 | 审校完成 | reviewer | coordinator | 修改意见、问题列表 |
 | 修改稿件 | coordinator | writer | 根据修改意见修改稿件 |
-| 终稿完成 | main | coordinator   | 待发布稿件 |
+| 终稿完成 | writer | coordinator   | 待发布稿件 |
 | 发布稿件 | coordinator | main | 稿件已完成 |
 
 ### 5.4 审计追溯
@@ -227,16 +228,15 @@ writer 撰写初稿 → reviewer 审校 → writer 修订 → coordinator 确认
 
 ---
 
-## 6. coordinator 调度方式（事件驱动，无定时器）
+## 6. coordinator 调度方式（事件驱动）
 
-- **不要**为 coordinator 配置 cron / 定时器去定期 `git pull` 或扫仓。
-- coordinator **仅在**收到 **main** 的写作任务，或收到 **researcher / writer / reviewer** 的 `sessions_send` 完成通知后，才对项目仓执行 pull → 核对交付物 → 更新 `tasks/progress_log.md` / `memory/MEMORY.md` → commit → push → 按需通知下一角色。
+- coordinator **仅在**收到 **main** 的写作任务通知，或收到 **researcher / writer / reviewer** 的 `sessions_send` 完成通知后，才对项目仓执行 pull → 核对交付物 → 更新 `tasks/progress_log.md` / `memory/MEMORY.md` → commit → push → 按需通知下一角色。
 
 ---
 
 ## 7. 禁止行为（全局）
 
-- 在 `multi-agent/` 内放置 **SOUL.md、TOOLS.md、USER.md** 或各 Agent 私有 **memory/skills**
+- 在 `<repo_name>/` 内放置 **SOUL.md、TOOLS.md、USER.md** 或各 Agent 私有 **memory/skills**
 - 越权修改其他角色独占路径（见各 `agents/*.md`）
 - 提交信息不带 **正确 `[角色名]`** 前缀
 - 未经授权删除或覆盖他人已提交的文件
@@ -246,21 +246,23 @@ writer 撰写初稿 → reviewer 审校 → writer 修订 → coordinator 确认
 ## 8. 执行顺序
 
 1. 阅读仓库 `agents/*.md` 了解各角色配置
-2. 按第 2 节注册四个智能体；**researcher / writer / reviewer** 可待 coordinator 下发 **repository_url + access_token** 后再在各自工作空间执行 `git clone`（或使用凭据更新已有 `multi-agent/` 远程）
+2. 按第 2 节注册四个智能体；**researcher / writer / reviewer** 可待 coordinator 下发 **repository_url + access_token** 后再在各自工作空间执行 `git clone`（或使用凭据更新已有 `<repo_name>//` 远程）
 3. 为每个 Agent 生成 `SOUL.md / TOOLS.md / USER.md`
 4. 按第 3 节配置智能体间通信
 5. 重启 Gateway：`openclaw gateway restart`
-6. 由 **main** 向 **coordinator** 下达写作任务；**coordinator** 新建项目远程仓（自模板拷贝 + 初始化 `memory/*` 与 `tasks/*` + 首提交）并通知各协同智能体
+6. 用户提供远程仓库名称 `repo_name`；由 **main** 向 **coordinator** 发送 `create_repo` 请求，coordinator fork/克隆当前模板仓并保持内容一致后，首提交/推送该模板内容，并通过会话通知 researcher / writer / reviewer 获取 `repository_url + access_token`
+7. 由 **main** 向 **coordinator** 下达写作任务；coordinator 在新建仓内生成 `tasks/task_breakdown.json` 与 `tasks/progress_log.md` 并启动协作流水线
 
 ---
 
 ## 9. 验收清单
 
-- [ ] 四个 Agent 工作目录均存在；**researcher / writer / reviewer** 在收到 coordinator 下发的 **repository_url** 后，各有独立 `multi-agent/` 克隆（**coordinator** 的 `multi-agent/` 在**首次接到 main 任务并建远程仓后**产生）
+- [ ] 四个 Agent 工作目录均存在；**researcher / writer / reviewer** 在收到 coordinator 下发的 **repository_url** 后，各有独立 `repo_name/` 克隆（**coordinator** 的 `repo_name/` 在**接到 main 的 `create_repo` 请求后**产生）
 - [ ] 每个目录下 **SOUL.md / TOOLS.md / USER.md** 与 `agents/<role>.md` 一致
 - [ ] 四个 Agent 均已 `openclaw agents add` 注册
 - [ ] 各角色预装 Skills 与 `agents/<role>.md` 列表一致
-- [ ] `sessions_send` / `sessions_spawn` 工具可用
+- [ ] `sessions_send` 工具可用
+- [ ] `coordinator`与**researcher / writer / reviewer**等智能体之间通信正常
 
 
 ## 10. 注意事项

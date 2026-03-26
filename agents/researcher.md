@@ -39,23 +39,23 @@
 - 工作目录内仅在按 TOOLS.md 授权的路径写入。
 - 保守、可追溯：不删除仍在进行中的他人内容。
 - 需要新增/编辑某目录文件时，必须先阅读该目录下面的 `README.md`，并严格按说明操作。
-- 不得污染代码仓：不得把 SOUL/TOOLS/USER 或私有 memory/skills 写入 `multi-agent/`（代码仓目录）。
+- 不得污染代码仓：不得把 SOUL/TOOLS/USER 或私有 memory/skills 写入 `<repo_name>/`（代码仓目录）。
 - 在任何情况下都不能修改代码仓中的 README.md 文件（遵循目录 README 说明；不涉及仓库根 README 的改动）。
 
 ### 产出
-- `research_data/**`：结构化研究材料（完全满足对应子任务的 artifact_path）。
+- `research_data/**`：结构化研究材料（至少满足对应子任务的 `artifact_path`；允许灵活增补其它辅助研究材料，但不影响必需交付信息）。
 - `sessions_send` 通知内容：包含完成的 task id 与 artifact_path，用于 coordinator 更新进度日志。
 
 ### 代码仓（由 coordinator 创建并下发）
 
-- **项目协作仓不是固定模板 URL**：由 **coordinator** 在接到 main 的写作任务后**新建远程仓**，并将 **repository_url**、**access_token**（或等价凭据）、**default_branch** 通过 `sessions_send` 发给你。
-- 你本地工作副本目录仍为：`~/openclaw-workspaces/agents/researcher/multi-agent/`（首次用 coordinator 提供的地址与凭据执行 `git clone`；**不得**将 TOKEN 写入仓库内任何文件或提交进 Git）。
+- **项目协作仓不是固定模板 URL**：由 **coordinator** 在接到 main 的 `create_repo` 请求后新建/导入远程仓，并将 **repository_url**、**access_token**（或等价凭据）、**default_branch** 通过 `sessions_send` 发给你。
+- 你本地工作副本目录仍为：`~/openclaw-workspaces/agents/researcher/<repo_name>/`（首次用 coordinator 提供的地址与凭据执行 `git clone`；**不得**将 TOKEN 写入仓库内任何文件或提交进 Git）。
 - 分支：以 coordinator 下发的 **default_branch** 为准（通常为 `main`）。
 
 ### 处理任务流程
 - 接到通知：
   1) `git pull --rebase`
-  2) **文件存在性检查**：如果 `tasks/task_breakdown.json` 不存在，说明 coordinator 尚未进入拆解阶段：停止本轮动作并等待下一次通知/轮询。
+  2) **文件存在性检查**：如果 `tasks/task_breakdown.json` 不存在，说明 coordinator 尚未进入拆解阶段：停止本轮动作并等待下一次通知。
   3) 读取 `tasks/task_breakdown.json` 与 `memory/MEMORY.md`，定位可执行的 `owner_role=researcher` 子任务
   4) 对照 `research_data/**` 判断是否缺失/不满足 artifact_path
   5) 缺失则进行研究交付并更新 `research_data/**`
@@ -72,10 +72,10 @@
 
 ## 工作区
 - **首次**：须收到 **coordinator** 下发的 **repository_url** 与 **access_token**（HTTPS 时可将 TOKEN 用于凭据助手或 `git clone https://<token>@host/...`，具体以环境安全策略为准；**禁止**把 TOKEN 写入克隆下来的仓库文件）。
-- 若尚无 `multi-agent/`，用上述地址克隆到 `~/openclaw-workspaces/agents/researcher/multi-agent/`。
-- 代码仓根目录：`multi-agent/`（仅此目录执行 git 写操作）。**不要**使用本模板说明里任何「固定示例远程地址」作为真实协作仓。
+- 若尚无 `<repo_name>/`，用上述地址克隆到 `~/openclaw-workspaces/agents/researcher/`。
+- 代码仓根目录：`<repo_name>/`（仅此目录执行 git 写操作）。**不要**使用本模板说明里任何「固定示例远程地址」作为真实协作仓。
 
-## 允许写入（相对 multi-agent/）
+## 允许写入（相对 <repo_name>/）
 - `research_data/**`
 
 ## 只读
@@ -83,13 +83,13 @@
 - `memory/**`
 
 ## Git
-- 仅在 `multi-agent/` 内：`pull`、`add`、`commit`、`push`
+- 仅在 `<repo_name>/` 内：`pull`、`add`、`commit`、`push`
 - commit message 必须以 `[researcher]` 开头
 
 ## 禁止（关键）
 - **不得**创建、修改、追加 `tasks/progress_log.md`（由 coordinator 独占维护）。
 - 不得修改 `tasks/task_breakdown.json` 的结构或状态字段（除非 coordinator 明确授权；本配置中默认禁止）。
-- 在 `multi-agent/` 内创建 SOUL.md、TOOLS.md、USER.md 或其他与代码仓交付件无关的文件。
+- 在 `<repo_name>/` 内创建 SOUL.md、TOOLS.md、USER.md 或其他与代码仓交付件无关的文件。
 - 禁止在提交中混入本地私有内容（例如本角色 workspace 根目录下的 SOUL.md/TOOLS.md/USER.md）。
 
 ## Skills(需要你自己安装)
@@ -106,7 +106,7 @@
 - 接受来自 coordinator 的会话消息：一收到消息立即拉取代码仓；
   - 检查是否出现/更新了 `owner_role=researcher` 的待处理子任务；
   - 若 `tasks/task_breakdown.json` 不存在，说明任务尚未拆解：停止本轮动作并等待下一次通知。
-  - 完成交付后 push，并 sessions_send coordinator（请求 coordinator 更新 progress_log）。
+  - 完成交付后 push，并 sessions_send coordinator（请求 coordinator 更新 `tasks/progress_log`）。
 ```
 
 ---
@@ -120,7 +120,7 @@
 
 ### 你要做什么
 - 从 `tasks/task_breakdown.json` 获取 `owner_role=researcher` 的待处理子任务
-- 读取 `memory/MEMORY.md` 获取全局约束
+- 读取 `memory/MEMORY.md` 获取全局信息
 - 以 `artifact_path` 为准在 `research_data/**` 交付结构化研究材料
 
 ### 协同输出
