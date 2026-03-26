@@ -113,12 +113,15 @@ OpenClaw 提供以下工具实现智能体间通信：
 
 ### 3.3 通信示例
 
-**main 创建项目仓：**
+**main 创建项目仓（先空仓，再灌入模板内容）：**
 
 ```python
 # 使用 sessions_send
-# main 使用用户提供的 ACCESS_TOKEN + repo_name
-# 在代码托管平台创建远程仓并初始化为与模板仓一致
+# 1) main 使用用户提供的 ACCESS_TOKEN + repo_name，在代码托管平台创建空远程仓
+# 2) main 下载/克隆当前模板仓到本地临时目录
+# 3) main 将模板仓文件完整拷贝到新仓工作目录（保留模板目录结构与文件）
+# 4) main 在新仓执行初始化提交并推送（例如: [main] init from template）
+# 5) 完成后获得可用的 repository_url / default_branch / project_id
 ```
 
 **main 通知 coordinator 下达写作任务（同时分发仓库凭据）：**
@@ -193,7 +196,7 @@ writer 撰写初稿 → reviewer 审校 → writer 修订 → coordinator 确认
 
 | 场景 | 发送方 | 接收方 | 消息内容 |
 |------|--------|--------|----------|
-| 仓库创建与初始化 | 用户输入 + main | 远程托管平台 | 用户提供 `ACCESS_TOKEN` 与 `repo_name`，main 创建远程仓并初始化为与模板仓一致 |
+| 仓库创建与初始化 | 用户输入 + main | 远程托管平台 | 用户提供 `ACCESS_TOKEN` 与 `repo_name`；main 先创建空远程仓，再下载模板仓并完整拷贝所有文件到新仓，初始化提交后推送 |
 | 写作任务创建与凭据下发 | main | coordinator | 写作主题、写作要求、截止时间、`project_id/repo_name`、`repository_url`、`access_token`、`default_branch` |
 | 资料收集 | coordinator | researcher | 收集资料主题、收集资料要求、完成时间 |
 | 资料收集完成 | researcher | coordinator | 收集资料完成，待开始初稿 |
@@ -238,7 +241,7 @@ writer 撰写初稿 → reviewer 审校 → writer 修订 → coordinator 确认
 3. 为每个 Agent 生成 `SOUL.md / TOOLS.md / USER.md`
 4. 按第 3 节配置智能体间通信
 5. 重启 Gateway：`openclaw gateway restart`
-6. 用户提供 `ACCESS_TOKEN` 与仓库名称 `repo_name`；由 **main** 创建远程项目仓并保证内容与模板仓一致
+6. 用户提供 `ACCESS_TOKEN` 与仓库名称 `repo_name`；由 **main** 先创建空远程项目仓，再下载模板仓并把所有文件完整拷贝到新仓，初始化提交后推送
 7. 当 **main** 收到写作需求时，向 **coordinator** 下发写作任务与仓库凭据（`repository_url + access_token`）
 8. coordinator 将仓库凭据转发给 researcher / writer / reviewer，并在项目仓内生成 `tasks/task_breakdown.json` 与 `tasks/progress_log.md` 启动协作流水线
 
@@ -258,7 +261,7 @@ writer 撰写初稿 → reviewer 审校 → writer 修订 → coordinator 确认
 
 - 引导用户提供代码托管平台的 ACCSESS_TOKEN 并提供给各协同智能体；禁止将 TOKEN 写入仓库内文件。
 - 引导用户提供新建仓库的英文名称。
-- 每个写作项目对应 **main 新建并初始化的独立远程仓**；访问凭据（如 GitHub **ACCESS_TOKEN**）由部署方安全保管，main 在写作任务下达时先发给 coordinator，再由 coordinator 通过 **sessions_send** 分发给需要 clone/push 的协同智能体（**不得**写入 Git 跟踪文件）。
+- 每个写作项目对应 **main 新建并初始化的独立远程仓**：流程为“先空仓 → 下载模板仓 → 完整拷贝模板文件 → 首次提交并推送”；访问凭据（如 GitHub **ACCESS_TOKEN**）由部署方安全保管，main 在写作任务下达时先发给 coordinator，再由 coordinator 通过 **sessions_send** 分发给需要 clone/push 的协同智能体（**不得**写入 Git 跟踪文件）。
 - 本仓库为**模板**；运行时协作以 **coordinator 创建的项目仓**为准。
 
 
