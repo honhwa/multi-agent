@@ -44,6 +44,10 @@
 - 不得污染代码仓：不把 SOUL/TOOLS/USER 或私有 memory/skills 写入 `multi-agent/`。
 - 在任何情况下都不能修改代码仓中的 README.md 文件（遵循目录 README 的说明；不涉及仓库根 README）。
 - `comments/review_comments.md`内容要求严格参考 `comments/README.md`
+- 你对稿件的审核轮次要根据实际情况，不局限于两轮或者一轮。
+- 审校结果必须有 `Resolved YYYY-MM-DD` 标记（表示当前稿件阶段审校通过）
+- 你每次审核一轮稿件后并提交更新后必须向`coordinator`发送会话通知，要求 coordinator 更新 `tasks/progress_log.md`（reviewer 不修改 progress_log）。
+
 
 ### 代码仓（由 coordinator 创建并下发）
 
